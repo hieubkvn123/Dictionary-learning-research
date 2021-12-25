@@ -49,7 +49,8 @@ def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_
     print(f"[CONFIG] Regularization method : L{norm}")
     print(f"[CONFIG] Regularization coefficient : {lambda_}")
     print(f"[CONFIG] Initialization method : {initializer}")
-    print("=======================================================")
+    print(f"[CONFIG] Batch Normalization : {str(bn)}")
+    print("=================================================")
 
     # Losses storage
     norm_losses = []
@@ -86,7 +87,7 @@ def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_
 
     try:
         for i in range(epochs):
-            print(f'Epoch #[{i+1}/{epochs}]\n====================')
+            print(f'Epoch #[{i+1}/{epochs}]\n=================================================')
             time.sleep(1.0)
 
             with tqdm.tqdm(total=len(train_loader)) as pbar:
