@@ -17,12 +17,17 @@ parser.add_argument('--num-ista', required=False, type=int, default=3, help='Num
 parser.add_argument('--regularization', required=False, type=int, default=1, help='Regularization term - 1 for L1 and 2 for L2')
 parser.add_argument('--lambda', required=False, type=float, default=1e-4, help='Regularization coefficient lambda')
 parser.add_argument('--initializer', required=False, type=str, default='eye', help='Initialization methods : ["xavier", "eye", "zeros", "normal"]')
+parser.add_argument('--bn', required=False, type=bool, default=True, help='Whether to apply BN in ISTA modules')
 args = vars(parser.parse_args())
 
 # Create output file format
 out_dir = './media'
-out_lost_file = f'LOSS_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}.png'
-out_sample_pred_file = f'PRED_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}.png'
+if(args['bn']):
+    out_lost_file = f'LOSS_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}_bnorm.png'
+    out_sample_pred_file = f'PRED_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}_bnorm.png'
+else:
+    out_lost_file = f'LOSS_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}.png'
+    out_sample_pred_file = f'PRED_head-{args["head_layers"]}_ista-{args["num_ista"]}_reg-L{args["regularization"]}_init-{args["initializer"]}.png'
 
 # Load the MNIST dataset
 transform = transforms.Compose([
@@ -53,6 +58,6 @@ input_dim = noisy.shape[1]
 # Start training
 lista, network = train_lista(loader, input_dim=input_dim, initializer=args['initializer'],
         head_layers=args['head_layers'], L=args['num_ista'], norm=args['regularization'],
-        lambda_=args['lambda'], out_plot_dir=out_dir, out_plot_file=out_lost_file)
+        lambda_=args['lambda'], bn=True, out_plot_dir=out_dir, out_plot_file=out_lost_file)
 visualize_result(loader, lista, network, out_dir=out_dir, out_file=out_sample_pred_file)
 

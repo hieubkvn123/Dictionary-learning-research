@@ -17,8 +17,8 @@ from torchvision import datasets, transforms
 from utils import get_device
 from models import LISTA, DenoiseNetwork
 
-def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_=1e-4, initializer='eye',
-                lr=0.0001, epochs=10, out_plot_file=None, out_plot_dir='media'):
+def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_=1e-4, bn=True, 
+        initializer='eye', lr=0.0001, epochs=10, out_plot_file=None, out_plot_dir='media'):
     '''
         Returns :
             - lista : Trained LISTA network for extracting sparse representation.
@@ -57,7 +57,7 @@ def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_
 
     # Initialize networks
     gpu, device = get_device()
-    lista = LISTA(input_dim, L=L).to(device)
+    lista = LISTA(input_dim, L=L, batch_norm=bn).to(device)
     network = DenoiseNetwork(input_dim, num_layers=head_layers).to(device)
 
     # Optimizers and loss function

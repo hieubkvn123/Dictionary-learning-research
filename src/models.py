@@ -40,21 +40,27 @@ class ISTA_Module(nn.Module):
         return outputs
     
 class LISTA(nn.Module):
-    def __init__(self, input_dim, L=10):
+    def __init__(self, input_dim, L=10, batch_norm=False):
         super(LISTA, self).__init__()
         self.input_dim = input_dim
         self.L = L
+        self.batch_norm = batch_norm
     
         self.ista_modules = nn.ModuleList()
-        
+        self.bn_modules = nn.ModuleList()
+
         for i in range(self.L):
             self.ista_modules.append(ISTA_Module(input_dim=self.input_dim))
-        
+            self.bn_modules.append(nn.BatchNorm1d(self.input_dim))
+
     def forward(self, y):
         x = torch.zeros_like(y)
         
-        for layer in self.ista_modules:
+        for layer, norm in zip(self.ista_modules, self.bn_modules):
             x = layer(x, y)
+            
+            if(self.batch_norm):
+                x = norm(x)
             
         return x
     
