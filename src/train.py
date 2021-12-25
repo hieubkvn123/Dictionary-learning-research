@@ -42,6 +42,15 @@ def train_lista(train_loader, input_dim=784, head_layers=1, L=3, norm=1, lambda_
     if(out_plot_file is not None):
         out_plot_file = os.path.join(out_plot_dir, out_plot_file)
 
+    # Print out the configuration
+    print(f"[CONFIG] Input dimension : {input_dim}")
+    print(f"[CONFIG] Number of head layers : {head_layers}")
+    print(f"[CONFIG] Number of ISTA modules : {L}")
+    print(f"[CONFIG] Regularization method : L{norm}")
+    print(f"[CONFIG] Regularization coefficient : {lambda_}")
+    print(f"[CONFIG] Initialization method : {initializer}")
+    print("=======================================================")
+
     # Losses storage
     norm_losses = []
     mse_losses = []
